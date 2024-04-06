@@ -68,8 +68,8 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
 setNewPage(newPage+1)
   }
 
-  function isOpenModal(string){
-    setCurrentObject(string)
+  function isOpenModal(data){
+    setCurrentObject(data)
 setModalIsOpen(true)
   }
 
