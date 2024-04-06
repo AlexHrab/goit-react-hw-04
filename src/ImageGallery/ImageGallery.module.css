@@ -2,20 +2,49 @@
     display: flex;
     flex-wrap: wrap;
     list-style-type: none;
-    gap: 16px;
+    gap: 28px;
     padding: 0;
     justify-content: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .card{
-    
-    display: block;
+    position: relative;
+padding: 0;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-    overflow: hidden;
+    box-shadow: 0 0 10px #fff;
+    transition: transform 250ms ease-in-out;
+}
+
+.card:hover{
+    transform: scale(1.02);
 }
 
 .image{
     object-fit: cover;
     width: 360px;
     height: 200px;
+}
+
+.likes{
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 10px;
+    color:white;
+    font-size: 26px;
+    font-weight: 700;
+    text-shadow: 0 0 10px #0e7490, 0 0 8px #0e7490, 0 0 12px #0e7490, 0 0 16px #0e7490, 0 0 20px #0e7490;
+    opacity: 0;
+    transition: all 500ms ease-in-out;
+}
+
+
+.card:hover .likes{
+    opacity: 1;
 }

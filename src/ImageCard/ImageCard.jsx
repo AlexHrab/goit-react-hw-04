@@ -1,9 +1,10 @@
 import css from '../ImageGallery/ImageGallery.module.css'
 
-function ImageCard({bigImage, littleImage, alt, modalOpen}){
+function ImageCard({littleImage, alt, likes}){
     return(
         <div className={css.card}>
-            <a href={bigImage}><img onClick={() => modalOpen(true)} className={css.image} src={littleImage} alt={alt}/></a>
+            <img className={css.image} src={littleImage} alt={alt}/>
+            <p className={css.likes}>likes:{likes}</p>
         </div>
     )
 }

@@ -1,15 +1,22 @@
+import toast, { Toaster } from 'react-hot-toast';
+import css from './SearchBar.module.css'
+
 function SearchBar({onSubmit, setSearchValue}){
 
   function Submit(evt){
+    setSearchValue("")
     evt.preventDefault();
     const form = evt.target;
 		const value = form.elements.input.value;
 		if(form.elements.input.value.trim() === "") {
-			alert("Please enter search term!")
+			toast("Please enter search term!")
 			return;
 		}
+    
 		onSubmit(value);
+    
     setSearchValue(value)
+    
     form.reset();
 };
   
@@ -22,9 +29,10 @@ function SearchBar({onSubmit, setSearchValue}){
       type="text"
       autoComplete="off"
       autoFocus
-      placeholder="Search images and photos"
+      placeholder="Search images"
+      className={css.input}
     />
-    <button type="submit">Search</button>
+    <button className={css.btn} type="submit">Search</button>
   </form>
 </header>
 

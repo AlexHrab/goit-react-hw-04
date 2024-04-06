@@ -6,6 +6,8 @@ import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn'
 import { perPage } from './unsplash-api'
 import Loader from './Loader/Loader'
 import ImageModal from './ImageModal/ImageModal'
+import toast, { Toaster } from 'react-hot-toast';
+import ErrorMessage from './ErrorMessage/ErrorMessage'
 let totalPages;
 import './App.css'
 
@@ -16,55 +18,89 @@ function App() {
   const[newPage, setNewPage] = useState(1)
   const [loading, setLoading] = useState(false);
   const[modalIsOpen, setModalIsOpen] = useState(false)
-
+  const[currentObject, setCurrentObject] = useState({url: "", alt: ""})
+  const[eror, setEror] = useState(false)
+ 
   
-  async function getPicture(value){
+
+  useEffect(() => {
+  async function getPicture(){
+    if(searchValue !==''){
     try{
-      
-      setElements([])
-    setSearchValue("")
     setLoading(true)
-const result = await getPictureWithValue(value, 1);
-setElements(result.data.results)
-setNewPage(2)
+const result = await getPictureWithValue(searchValue, newPage);
+setElements([...elements, ...result.data.results])
 totalPages = result.data.total_pages
-if(totalPages === newPage) alert('немає сторінок')
+if(totalPages === newPage) toast('No more pages!')
+if(totalPages === 0) toast('There are no pictures with that name!');
     }catch (error){
-console.log(error)
+      switch (error.response.status) {
+        case 400:
+          toast.error('Bad Request');
+          break;
+        case 401:
+          toast.error('Invalid Access Token!');
+          break;
+        case 403:
+          toast.error('Missing permissions to perform request!');
+          case 404:
+            toast.error('The requested resource doesn’t exist!');
+          case 500:
+            toast.error('Service problem!');
+          break;
+        default:
+          toast.error('Oops, something wrong..');}
+          setEror(true)
     }finally{
      setLoading(false)
     }
+}}getPicture()}, [searchValue, newPage])
+
+
+  function forSearch(value){
+    if(value === searchValue && newPage>1){setElements([]);setNewPage(1)} 
+    if(searchValue !== "" && value !== searchValue){setElements([]);setNewPage(1)}
+setSearchValue(value)
+window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-
- 
-  async function pagination(value){
-    
-    try{
-      setNewPage(newPage+1)
-      setLoading(true)
-const result = await getPictureWithValue(value, newPage);
-setElements([...elements, ...result.data.results])
-if(totalPages === newPage) alert('немає сторінок')
-
-    }catch (error){
-console.log(error)
-    }finally{
-      setLoading(false)
-    }
+  function pagination(){
+setNewPage(newPage+1)
   }
 
-  
- 
+  function isOpenModal(string){
+    setCurrentObject(string)
+setModalIsOpen(true)
+  }
+
+  function close(){
+    setModalIsOpen(false)
+  }
 
   return (
-    <div>
-    <SearchBar onSubmit={getPicture} setSearchValue={setSearchValue}/>
-    {/* <p>номер сторінки: {newPage}</p> */}
-    <ImageGallery images={elements} modalOpen={setModalIsOpen}/>
+    <div className='mainBox'>
+      <div className='navigation'>
+      {elements.length>0 && <p className='navText'>Quantity of pages<span className='navSpan'>{totalPages}</span></p>}
+    <SearchBar onSubmit={forSearch} setSearchValue={setSearchValue}/>
+    {elements.length>0 && <p className='navText'><span className='navSpan'>{newPage}</span>Page number</p>}
+    </div>
+
+    <ImageGallery images={elements} modalOpen={isOpenModal}/>
+
     {loading && <Loader/>}
-{elements.length > 0 && totalPages >= newPage && <LoadMoreBtn value={searchValue} onClick={pagination}/>}
-<ImageModal isOpen={modalIsOpen} onClose ={() => setModalIsOpen(true)}></ImageModal>
+    
+{elements.length > 0 && totalPages !== newPage && <LoadMoreBtn onClick={pagination}/>}
+
+<ImageModal isOpen={modalIsOpen} onClose ={close} currentObject={currentObject}/>
+
+{eror && <ErrorMessage/>}
+
+<Toaster toastOptions={{
+    className: 'toaster',
+  }} containerStyle={{
+    top: 300,
+  }}
+/>
     </div>
   )
 }
