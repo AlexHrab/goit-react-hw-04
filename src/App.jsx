@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import getPictureWithValue from './unsplash-api'
-import SearchBar from './SearchBar/SearchBar'
-import ImageGallery from './ImageGallery/ImageGallery'
-import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn'
+import SearchBar from './components/SearchBar/SearchBar'
+import ImageGallery from './components/ImageGallery/ImageGallery'
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn'
 import { perPage } from './unsplash-api'
-import Loader from './Loader/Loader'
-import ImageModal from './ImageModal/ImageModal'
+import Loader from './components/Loader/Loader'
+import ImageModal from './components/ImageModal/ImageModal'
 import toast, { Toaster } from 'react-hot-toast';
-import ErrorMessage from './ErrorMessage/ErrorMessage'
+import ErrorMessage from './components/ErrorMessage/ErrorMessage'
 let totalPages;
 import './App.css'
 
