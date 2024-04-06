@@ -1,0 +1,21 @@
+.box{
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    gap: 16px;
+    padding: 0;
+    justify-content: center;
+}
+
+.card{
+    
+    display: block;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.image{
+    object-fit: cover;
+    width: 360px;
+    height: 200px;
+}
